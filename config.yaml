@@ -1,0 +1,80 @@
+# -----------------------------------------------------------------------------
+# Zelda 40th Anniversary Switch 2 - stock monitor config
+# -----------------------------------------------------------------------------
+# Add/remove/edit entries below. Every store needs:
+#   name                 - label used in the text notification
+#   url                  - the exact product page to watch
+#   in_stock_phrases     - if ANY of these appear on the page, treat as IN STOCK
+#   out_of_stock_phrases - if ANY of these appear, treat as OUT OF STOCK
+#                          (checked first - takes priority over in_stock_phrases)
+#
+# Notes:
+#  - Phrase matching is case-insensitive and checks the fully-rendered page text.
+#  - If NEITHER list matches, the store is treated as "unknown" and skipped
+#    (no notification) rather than risking a false alert - check the logs
+#    and adjust phrases if a store keeps coming back "unknown".
+#  - Fill in real product URLs for each retailer you want watched. GameStop's
+#    is pre-filled as a confirmed working example.
+# -----------------------------------------------------------------------------
+
+check_interval_seconds: 240        # base delay between full sweeps (4 min)
+check_interval_jitter_seconds: 90  # random +/- jitter added, to look less bot-like
+request_timeout_ms: 20000
+page_load_wait_ms: 2500            # extra wait after page load for JS to settle
+
+stores:
+  - name: "GameStop"
+    url: "https://www.gamestop.com/consoles-hardware/nintendo-switch-2/products/nintendo-switch-2-the-legend-of-zelda-40th-anniversary-edition/20037854.html"
+    in_stock_phrases:
+      - "add to cart"
+    out_of_stock_phrases:
+      - "currently unavailable"
+      - "sold out"
+      - "out of stock"
+
+  - name: "Best Buy"
+    url: "REPLACE_WITH_BESTBUY_PRODUCT_URL"
+    in_stock_phrases:
+      - "add to cart"
+    out_of_stock_phrases:
+      - "sold out"
+      - "coming soon"
+      - "currently unavailable"
+
+  - name: "Target"
+    url: "REPLACE_WITH_TARGET_PRODUCT_URL"
+    in_stock_phrases:
+      - "add to cart"
+      - "shipping"
+      - "pickup"
+    out_of_stock_phrases:
+      - "out of stock"
+      - "sold out"
+      - "coming soon"
+      - "notify me"
+
+  - name: "Walmart"
+    url: "REPLACE_WITH_WALMART_PRODUCT_URL"
+    in_stock_phrases:
+      - "add to cart"
+    out_of_stock_phrases:
+      - "out of stock"
+      - "sold out"
+
+  - name: "Nintendo Store"
+    url: "REPLACE_WITH_NINTENDO_STORE_PRODUCT_URL"
+    in_stock_phrases:
+      - "add to cart"
+    out_of_stock_phrases:
+      - "out of stock"
+      - "sold out"
+      - "unavailable"
+
+  - name: "Amazon"
+    url: "REPLACE_WITH_AMAZON_PRODUCT_URL"
+    in_stock_phrases:
+      - "add to cart"
+      - "buy now"
+    out_of_stock_phrases:
+      - "currently unavailable"
+      - "out of stock"
