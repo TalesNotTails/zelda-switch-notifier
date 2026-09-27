@@ -14,21 +14,30 @@ logger = logging.getLogger("notifier")
 
 
 def _send_twilio(message: str) -> bool:
-    sid = os.environ.get("TWILIO_ACCOUNT_SID")
-    token = os.environ.get("TWILIO_AUTH_TOKEN")
+    # Twilio API Keys replace the Account Auth Token as the credential used
+    # to authenticate, but the Account SID is still required as part of the
+    # REST URL path (it identifies *which* account's Messages resource
+    # you're posting to) - it's not itself a secret in this scheme.
+    account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+    api_key_sid = os.environ.get("TWILIO_API_KEY_SID")
+    api_key_secret = os.environ.get("TWILIO_API_KEY_SECRET")
     from_number = os.environ.get("TWILIO_FROM_NUMBER")
     to_number = os.environ.get("TWILIO_TO_NUMBER")
 
-    if not all([sid, token, from_number, to_number]):
-        logger.error("Twilio notify requested but credentials are incomplete in .env")
+    if not all([account_sid, api_key_sid, api_key_secret, from_number, to_number]):
+        logger.error(
+            "Twilio notify requested but credentials are incomplete in .env "
+            "(need TWILIO_ACCOUNT_SID, TWILIO_API_KEY_SID, TWILIO_API_KEY_SECRET, "
+            "TWILIO_FROM_NUMBER, TWILIO_TO_NUMBER)"
+        )
         return False
 
-    url = f"https://api.twilio.com/2010-04-01/Accounts/{sid}/Messages.json"
+    url = f"https://api.twilio.com/2010-04-01/Accounts/{account_sid}/Messages.json"
     try:
         resp = requests.post(
             url,
             data={"From": from_number, "To": to_number, "Body": message},
-            auth=(sid, token),
+            auth=(api_key_sid, api_key_secret),
             timeout=15,
         )
         if resp.status_code >= 300:
