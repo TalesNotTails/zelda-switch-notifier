@@ -9,6 +9,7 @@ COPY app/ ./app/
 COPY config.yaml .
 
 # Persist "last known state" across restarts
-VOLUME ["/app/state"]
+# commented out to work on Railway
+# VOLUME ["/app/state"]
 
 CMD ["python", "-u", "app/main.py"]
